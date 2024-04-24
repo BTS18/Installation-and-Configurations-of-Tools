@@ -1,0 +1,50 @@
+what is tomcat?
+Tomcat is used for java based application to host on web.it can be automatically done by using Tomcat
+
+preRequisite for Tomcat installation?
+*aws 
+*java
+*wget
+*unzip
+
+Steps to Install and Connect to Tomcat:
+
+1.Go to Root User in EC2
+2.yum install java-17-openjdk
+3.yum install wget unzip -y
+4.cd /opt/ path
+5.wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.84/bin/apache-tomcat-10.1.17.zip
+6.unzip apache-tomcat-10.1.17.zip
+7.cd apache-tomcat-10.1.17
+8.cd bin and change the permissions to the sh files using chmod u+x *.sh command after changing the permissions start the tomcat by using ./startup.sh command
+9.cd ../webapps/manager/META-INF and open the context.xml file and edit the file by adding this symbol at the start <!--  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />  --> this symbols at the end of this line
+9.cd ../conf/ and open the tomcat-users.xml file using vi editor to add username and password for the roles that we use
+ eg:- roles are manager and host-manager
+10.after opening vi tomcat-users.xml file edit and paste this line <user username="tarun" password="tarun" roles="manager-gui,admin-gui,manager-script"/> at the bottom of the file and close the file.
+11.copy the EC2 ipv4 address and paste into new tab in chrome along with the port number that is ipv4address:8080 like this.
+12.To see the output you need to check wheather the security group in EC2 have TCP port enabled
+13.if everything works you can the tomcat webpages that says congratulations you installed tomcat along with modules and features
+14.click manager module and provide the username and password that was given in the conf/tomcat-user.xml file earlier in step 10.
+15.finally you can see the tomcat web application manager page and can deploy your application.
+16.To access your host-manager modules you need do the same as what you did to manager that is cd ../webapps/host-manager/META-INF and open the context.xml file and edit the file by adding
+         this symbol at the start
+        <!-- 
+           <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+              allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> 
+        -->
+         this symbols at the end of this line
+17.Then close the file go to tomcat web pages and click on host-manager modules and give the same username and password that was given in the tomcat-users.xml file and can see the host 
+host manager application pages.
+18.After using tomcat you have to shutdown the tomcat server that is go to bin directory and type ./shutdown.sh command to stop tomcat server.
+19.Start tomcat go to project directory clone the maven web application file from github and go to the maven web application directory use mvn clean package command.
+20.Then go to target directory copy the maven web application war file and paste in tmp directory by using cp maven-web-application.war /tmp/ command
+21.Open FileZilla connect to ec2 go to /tmp and drag the maven web application from /tmp directory and drop into downloads folder in local machine
+22.open tomcat go to manager app module go down and upload the maven web appliaction war from local repo(file manager) and click deploy,Then you can see the war file that is deployed
+and click on the war file to see the output.
+
+Finally you deployed the war file in TomCat Web application server <<--Good Luck-->>
+
+
+
+
