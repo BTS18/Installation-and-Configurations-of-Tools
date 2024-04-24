@@ -1,0 +1,60 @@
+--> Prerequisite EPEL is a third party website to download ansible in Redhat linux download this first using the below command.
+    rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 
+
+--> yum install ansible -y
+--> ansible --version to check the version
+--> Create a dir go to that dir create a file name as inventory
+--> Copy the encrypted private key from the .pem file of the web01 ec2 instance from downloads folder and create a new file with the same key name and paste the encrypted private key into this file.   
+--> Go to the inventory file using vi inventory write YAML Syntax or Script and make sure the indentations are assigned properly and write 
+   
+    all:
+      hosts:
+        web01:
+          ansible_host: Permanent ipaddress of web01 EC2 instance
+          ansible_user: ec2-user
+          ansible_ssh_private_key_file: name of the key file that is created which present in current working directory
+        web02:
+          ansible_host: Permanent ipaddress of web02 EC2 instance
+          ansible_user: ec2-user
+          ansible_ssh_private_key_file: Client-key.pem name of the key file that is created which present in current working directory
+        db01:
+          ansible_host: Permanent ipaddress of db01 EC2 instance
+          ansible_user: ec2-user
+          ansible_ssh_private_key_file: Client-key.pem name of the key file that is created which present in current working directory
+      children:
+        webservers:
+          hosts:
+            web01:
+            web02:
+        dbservers:
+          hosts:
+            db01:
+        webdbservers:    #Combinations of both web and db servers in one group if we run webdbservers it connects all the web and db servers
+          children:
+            webservers:
+            dbservers:
+     
+
+--> Ansible web01 -m ping -i inventory
+--> After typing the above command to connect to the specified web01 ec2 it ask are you sure want to connect to this we can type yes and it connects to it.. 
+    but if we dont want to ask this question. we can do the next steps to directly connect to ec2 without asking the user.because there might be number of ec2 to start.it helps in that case 
+--> mv ansible.cfg ansible.cfg_backup rename the old ansible config file.
+--> ansible-config init --disabled -t all > ansible.cfg run this command after renaming the old config and now you can see the new config file of ansible.
+--> Change to root user sudo -i cd /etc/ansible and open the file vi ansible.cfg search /host_key_checking remove the semi colon and instead of true change in to False.
+--> Back to ec2-user go to inventory file paste this command again ansible web01 -m ping -i inventory 
+ 
+Note: Here web01 is the name of the ec2 instance and -m means module and ping means ssh and -i means inventory
+ 
+--> It says permissions are too open to connect to so we need to chnage the permissions for the pem file chmod 400 Client-key.pem 
+    this is the pem file that I created in the same path and pasted my private key into it from download folder of the laptop
+--> ansible web01 -m ping -i inventory command one last time and press enter. Now it says success which means it connected to the web01 EC2 instance.
+--> To connect to all the nodes(ec2 instances) we can use ansible all -m ping -i inventory
+--> ansible webservers -m ping -i inventory this connects to all the instnaces that are present in the webservers group
+--> ansible dbservers -m ping -i inventory this command connects to all the instances that are present in that dbservers group
+
+Syntax : ansible <group/ec2-name> -m ping -i inventory
+
+--> To login to the particular EC2 instances use ssh -i Client-key.pem ec2-user@permanent ipaddress of the particular ec2 instances from the inventory
+--> We write ansible playbook in which it has the configurations related to that ec2 instances.
+Note:configurations means what tools to install which services to start in that instances
+

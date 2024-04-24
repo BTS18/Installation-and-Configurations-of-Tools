@@ -1,0 +1,28 @@
+--> sudo yum update -y
+--> sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+--> sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+--> sudo yum upgrade
+--> sudo dnf install java-17-amazon-corretto -y
+--> sudo yum install jenkins -y
+--> sudo systemctl enable jenkins
+--> sudo systemctl start jenkins
+--> sudo systemctl status jenkins
+--> sudo cat /var/lib/jenkins/secrets/initialAdminPassword and copy the password
+--> copy and paste ec2 ipv4 address along with the port number
+--> enter password and click install suggested plugins and create Jenkins profile
+--> Add Credentials for GitHub Tomcat
+--> Install Maven plugin,Deploy to Container plugin
+--> Create Item(job) go to configure scroll down in Source Code Management add github repo URL,GitHub Credentials and branch
+--> Scroll down go to Build Steps select Execute Shell and type mvn clean install or Select Invoke Top-level Maven Target select maven version and give clean install command
+--> Scroll down go to Post-Build Actions type **/*.war command in WAR/EAR files and give name of the project in context path and click on container Select Tomcat 9 
+--> Give TomCat credentials and ipv4 adress of Tomcat and click save and start the Build
+--> so that any file that ends with war extension can push into Tomcat.Congrats you successfully deployed your application in Tomcat.
+
+Note: 
+     --> To add Maven go to tools in manager jenkins Scroll select maven installations and select version.
+     --> check the jenkins version present at R bottom in jenkins page to update go to System information see the path for Executable-war which is /usr/share/java/ go to that path in AWS ec2.
+     --> You can see Jenkins.war file. Always take Backup before installing the New Jenkins version by renaming the Previous Jenkins file by mv Backup_jenkins.war command.
+     --> Go to official Jenkins.war website Always copy the link address of the second latest version go to cd /usr/share/java/ in AWS ec2 instance.
+     --> wget https://updates.jenkins.io/download/war/2.441/jenkins.war use this command to download the jenkins.war file.we need to stop jenkins before downloading the new jekins.war file
+     --> To go back to old version you need to remove the present rm -rf jenkins.war file and rename the old mv Backup_jenkins.war into jenkins.war. Stop and start jenkins again !!!!!!

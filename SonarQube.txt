@@ -1,0 +1,20 @@
+Steps to SonarQube Installation and Setup:
+
+--> SonarQube runs on java so install java using yum install java-17-openjdk wget unzip -y command
+--> cd /opt/ directory
+--> Install SonarQube using wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.3.0.82913.zip command on optional path
+--> unzip sonarqube-10.3.0.82913.zip
+--> Rename the file better using mv sonarqube-10.3.0.82913 sonarqube
+--> By default SonarQube does not run on root user so create user with useradd sonar command
+--> Use visudo command then add sonar  ALL=(ALL)  NOPASSWD: ALL line below the root user access line
+--> Change the Ownership of Sonarqube chown -R sonar:sonar /opt/sonarqube/
+--> Change the Permissions to all the files in SonarQube using chmod -R 775 /opt/sonarqube
+--> Change user by su - sonar
+--> Go to this Path to start Sonarqube cd /opt/sonarqube/bin/linux-x86-64
+--> sh sonar.sh start 
+--> sh sonar.sh status command to check whether its in running state or not
+--> Copy and paste your ec2 ipv4 along with the port 9000 which is a default port for sonarqube then you can see the SonarQube Page
+--> Go to root user and cd /project/maven-web-application 
+--> Open vi POM.xml file copy the sonarqube ip address from chrome and paste it in the properties section along with sonarqube token that is generated in sonarqube website
+--> Use mvn sonar:sonar command to see the maven-web-application file in sonarqube website you sucessfully uploaded your java file to check the quality of code.  
+
